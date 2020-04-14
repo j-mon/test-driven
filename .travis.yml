@@ -1,5 +1,8 @@
 sudo: required
 
+services:
+  - docker
+
 env:
   DOCKER_COMPOSE_VERSION: 1.23.2
 
@@ -9,14 +12,12 @@ before_install:
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
 
-
 before_script:
   - docker-compose up -d --build
 
 script:
-  - docker-compose exec users python manage.py recreate_db
   - docker-compose exec users python manage.py test
   - docker-compose exec users flake8 project
-  
+
 after_script:
   - docker-compose down
